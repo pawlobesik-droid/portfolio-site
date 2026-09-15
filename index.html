@@ -7,14 +7,74 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Шапка з іменем і навігацією по розділах -->
-  
-  <!-- Блок «Про мене» -->
-  
-  <!-- Галерея робіт (набір карток проєктів) -->
-  
-  <!-- Блок контактів -->
-  
+  <header>
+    <h1>Портфоліо дизайнера</h1>
+    <nav>
+      <ul>
+        <li><a href="#about">Про мене</a></li>
+        <li><a href="#works">Роботи</a></li>
+        <li><a href="#contacts">Контакти</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>Про мене</h2>
+      <p>Привіт! Я графічна та веб-дизайнерка. Займаюся розробкою візуальних концептів, UI/UX дизайном та веб-сайтами.</p>
+    </section>
+
+    <section id="works">
+      <h2>Мої роботи</h2>
+      <article>
+        <h3>Концепт веб-сайту галереї</h3>
+        <img src ="assets/img/project1.jpg" alt="Адаптивний макет веб-сайту для галереї сучасного мистецтва">
+        <p>Дизайн-концепт головної сторінки з темною темою та мінімалістичною сіткою.</p>
+      </article>
+
+      <article> 
+        <h3>Фірмовий стиль кав'ярні</h3>
+        <img src="assets/img/project2.jpg" alt="Логотип та брендбук для кав'ярні">
+        <p>Розробка логотипа, палітри кольорів та поліграфічної продукції </P>
+      </article>
+
+      <article>
+        <h3>UI/UX мобільного застосунку</h3>
+        <img src="assets/img/project3.jpg" alt="Інтерфейс мобільного застосунку для трекінгу звичок">
+        <p>Розробка користувацького інтерфейсу та досвіду користування для мобільного застосунку.</p>
+      </article>
+
+    </section>
+
+    </main>
+
+    <aside>
+      <h2>Мої навички</h2>
+      <ul>
+        <li>Графічний дизайн</li>
+        <li>Дизайн ігор </li>
+        <li>UI/UX дизайн</li>
+        <li>HTML5 / CSS3 / JavaScript</li>
+      </ul>
+    </aside>
+
+    <footer id="contacts">
+      <h2>Контакти</h2>
+      <form action="#" method="post">
+        <div>
+          <label for="user-email">Ваш Email:</label><br>
+          <input type="email" id="user-email" name="email" placeholder="example@mail.com">
+        </div>
+        <div>
+          <label for="user-message">Повідомлення:</label><br>
+          <textarea id="user-message" name="message" rows="3"></textarea>
+        </div>
+        <button type ="submit">Надіслати:</button>
+      </form>
+
+      <p>Навчальний проєкт з курсу «Програмування веб-застосувань»</p>
+    </footer> 
+
   <!-- Підвал -->
 
   <script src="js/app.js"></script>
