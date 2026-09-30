@@ -47,8 +47,7 @@ nav a:hover {
 }
 
 main {
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: none;
     padding: 0 1rem;
 }
 
@@ -187,4 +186,13 @@ img {
         max-width: 1200px;
         padding: 0 2rem;
     }
+
+    .layout {
+       display: grid;
+       grid-template-columns: 3fr 1fr;
+       gap: 2rem;
+       max-width: 1200px;
+       margin: 0 auto;
+       padding: 0 2rem;
+   }
 }
