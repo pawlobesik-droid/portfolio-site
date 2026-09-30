@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
+  <header class="site-header">
     <h1>Портфоліо дизайнера</h1>
     <nav>
       <ul>
@@ -26,16 +26,17 @@
 
     <section id="works">
       <h2>Мої роботи</h2>
+      <div class="cards"> 
       <article class="card">
         <h3>Концепт веб-сайту галереї</h3>
-        <img src ="assets/img/project1.jpg" alt="Адаптивний макет веб-сайту для галереї сучасного мистецтва">
+        <img src="assets/img/project1.jpg" alt="Адаптивний макет веб-сайту для галереї сучасного мистецтва">
         <p>Дизайн-концепт головної сторінки з темною темою та мінімалістичною сіткою.</p>
       </article>
 
       <article class="card">
         <h3>Фірмовий стиль кав'ярні</h3>
         <img src="assets/img/project2.jpg" alt="Логотип та брендбук для кав'ярні">
-        <p>Розробка логотипа, палітри кольорів та поліграфічної продукції </P>
+        <p>Розробка логотипа, палітри кольорів та поліграфічної продукції</p>
       </article>
 
       <article class="card">
@@ -43,6 +44,7 @@
         <img src="assets/img/project3.jpg" alt="Інтерфейс мобільного застосунку для трекінгу звичок">
         <p>Розробка користувацького інтерфейсу та досвіду користування для мобільного застосунку.</p>
       </article>
+      </div>
 
     </section>
 
@@ -69,13 +71,11 @@
           <label for="user-message">Повідомлення:</label><br>
           <textarea id="user-message" name="message" rows="3"></textarea>
         </div>
-        <button type ="submit">Надіслати</button>
+        <button type="submit">Надіслати</button>
       </form>
 
       <p>Навчальний проєкт з курсу «Програмування веб-застосувань»</p>
     </footer> 
-
-  <!-- Підвал -->
 
   <script src="js/app.js"></script>
 </body>
