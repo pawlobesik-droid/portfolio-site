@@ -1,20 +1,58 @@
+:root {
+
+    /* нейтральні кольори */
+    --color-bg: #BECFEB;
+    --color-surface: #ffffff;
+    --color-border: #96B0D8;
+
+    /* текст */
+    --color-text: #1A1A1A;
+    --color-text-muted: #3D4A66;
+    --color-caption: #53627C;
+
+    /* акцент (лише hover карток галереї) */
+    --color-accent: #68150A;
+
+     /* гарнітури: serif для заголовків, sans-serif для тексту */
+    --font-heading: 'Playfair Display', Georgia,'Times New Roman', serif;
+    --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; 
+
+    /* шкала розмірів */
+    --fs-small: 0.875rem;
+    --fs-base: 1rem;
+    --fs-h3: 1.25rem;
+    --fs-h2: 1.75rem;
+    --fs-h1: 2.25rem;
+}
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 body {
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
     line-height: 1.6;
-    color: #222222;
-    background-color: #f8f9fa;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+h1, h2, h3 {
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    color: var(--color-text);
 }
 
 header {
-    background-color: #ffffff;
+    background-color: var(--color-surface);
     padding: 2.5rem 1.5rem;
     border-bottom: 1px solid #e0e0e0;
     text-align: center;
@@ -37,13 +75,16 @@ nav ul {
 }
 
 nav a {
+    padding: 0.25rem 0;
     text-decoration: none;
-    color: #0066cc;
+    color: var(--color-text);
     font-weight: 600;
+    border-bottom: 2px solid transparent;
 }
 
-nav a:hover {
-    text-decoration: underline;
+nav a:hover,
+    nav a:focus-visible {
+    border-bottom: 2px solid var(--color-text);
 }
 
 main {
@@ -52,24 +93,27 @@ main {
 }
 
 section {
-    margin-bottom: 2.5rem;
+    margin-bottom: 4rem;
 }
 
 section h2 {
-    font-size: 1.8rem;
-    color: #111111;
-    border-bottom: 2px solid #0066cc;
+    margin: 0 0 1.5rem 0;
+    font-size: var(--fs-h2);
+    border-bottom: 1px solid var(--color-border);
     padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
 }
-
+ #about p {
+    max-width: 65ch;
+    color: var(--color-text-muted);
+ }
+ 
 .card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     overflow: hidden;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: var(--color-surface);
 }
 
 .card img {
@@ -79,33 +123,54 @@ section h2 {
 
 .card h3,
 .card p {
-    padding: 0 1.2rem;
+    padding: 0 1.25rem;
 }
 
 .card h3 {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    color: #111111;
+    margin: 1.25rem 0 0.75rem 0;
+    font-size: var(--fs-h3);
+    transition: color 0.2s ease;
 }
 
 .card p {
-    margin-bottom: 1rem;
-    color: #555555;
+    margin: 1rem 0 1.25rem;
+    font-size: var(--fs-small);
+    color: var(--color-caption);
 }
 
+/* ---------- 6. Нечітка вимога ----------
+   Вимога: «дизайн не повинен відвертати увагу від самих робіт».
+   Інтерпретація: мінімалістичний інтерфейс із прохолодною нейтральною палітрою
+   (пастельно-блакитний фон #BECFEB, білі картки #ffffff, майже чорний текст #1A1A1A, 
+   м'які блакитно-сірі межі #96B0D8), завдяки чому єдиними яскравими колірними 
+   акцентами на сторінці залишаються самі роботи портфоліо.
+   Глибокий бордовий колір #68150A застосовано виключно до hover-стану картки та її 
+   заголовка, щоб підказувати користувачеві момент взаємодії, не конкуруючи з 
+   візуальним вмістом галереї. Просторі відступи між картками надають кожному 
+   макету «повітря», а стриманий приглушений підпис пояснює роботу, не привертаючи 
+   зайвої уваги. */
+ .card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+ }
+
+ .card:hover h3 {
+    color: var(--color-accent);
+ }
+
+
 aside {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    align-self:start;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     padding: 1.5rem;
     margin-bottom: 2.5rem;
 }
 
 aside h2 {
-    font-size: 1.4rem;
-    margin-top:0;
-    margin-bottom: 1rem;
-    color: #111111;
+    font-size: var(--fs-h3);
+    margin: 0 0 1rem;
 }
 
 aside ul {
@@ -116,16 +181,57 @@ aside ul {
 
 aside li {
     margin-bottom: 0.5rem;
-    color: #333333;
+    color: var(--color-text-muted);
 }
 
 footer {
-    padding: 1.5rem 0;
-    border-top: 1px solid #e0e0e0;
-    font-size: 0.9rem;
-    color: #666666;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
     text-align: center;
 }
+ footer h2 {
+    font-size: var(--fs-h3);
+    margin: 0 0 1rem;
+ }
+
+ footer form div {
+    margin-bottom: 1rem;
+ }
+
+ input,
+ textarea,
+button {
+    font: inherit;
+}
+
+input,
+textarea {
+    width: 100%;
+    max-width: 24rem;
+    margin-top: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid #767676;
+    border-radius: 4px;
+}
+
+button {
+    padding: 0.625rem 1.5rem;
+    color: #ffffff;
+    background-color: var(--color-text);
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3a3a3a;
+}
+
 
 .site-header {
     display: flex;
@@ -133,11 +239,16 @@ footer {
     align-items: center;
     flex-wrap: wrap;
     gap: 0.75rem;
+    padding: 2.5rem 1.5rem;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
 }
 
 .site-header h1 {
     margin: 0;
-    font-size: 1.75rem;
+    font-size: var(--fs-h1);
+    font-weight: 700;
 }
 
 img {
@@ -148,7 +259,7 @@ img {
 .cards {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .cards .card {
@@ -158,6 +269,7 @@ img {
 @media (min-width: 600px) {
     .cards {
         grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
     }
 
     .site-header h1 {
@@ -169,7 +281,6 @@ img {
     .site-header {
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
         padding: 2rem 3rem;
     }
 
@@ -177,9 +288,17 @@ img {
         font-size: 2.5rem;
     }
 
+    .layout {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+        padding: 3rem 2rem 0;
+    }
+
+    
     .cards {
         grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
     }
 
     main {
@@ -188,11 +307,8 @@ img {
     }
 
     .layout {
-       display: grid;
-       grid-template-columns: 3fr 1fr;
-       gap: 2rem;
-       max-width: 1200px;
+       max-width: 900px;
        margin: 0 auto;
-       padding: 0 2rem;
+       padding: 2.5rem 1rem 0;
    }
 }
