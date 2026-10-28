@@ -11,40 +11,40 @@ if (placeholderCard) {
 // Крок 4. Оголошення даних варіанта 2 (Портфоліо фотографа/дизайнера)
 // Масив об'єктів робіт портфоліо
 const works = [
-    { 
+    {   
+        id: 1,
         title: 'Концепт веб-сайту галереї', 
         year: 2026, 
-        category: 'Веб-дизайн', 
-        desc: 'Дизайн-концепт головної сторінки з темною темою та мінімалістичною сіткою.', 
-        img: 'assets/img/project1.jpg' 
+        category: 'Веб-дизайн',
+        image: 'assets/img/project1.jpg' 
     },
     { 
+        id: 2,
         title: 'Фірмовий стиль кав\'ярні', 
         year: 2024, 
         category: 'Брендинг', 
-        desc: 'Розробка логотипа, палітри кольорів та поліграфічної продукції.', 
-        img: 'assets/img/project2.jpg' 
+        image: 'assets/img/project2.jpg' 
     },
     { 
+        id: 3,
         title: 'UI/UX дизайн мобільного застосунку', 
         year: 2022, 
         category: 'UI/UX', 
-        desc: 'Розробка користувацького інтерфейсу та досвіду для трекінгу звичок.', 
-        img: 'assets/img/project3.jpg' 
+        image: 'assets/img/project3.jpg' 
     },
     { 
+        id: 4,
         title: 'Редизайн сервісу доставки', 
         year: 2025, 
-        category: 'Веб-дизайн', 
-        desc: 'Оновлення мобільного інтерфейсу користувача та покращення навігації замовлень.', 
-        img: 'assets/img/project4.jpg' 
+        category: 'Веб-дизайн',
+        image: 'assets/img/project4.jpg' 
     },
     { 
+        id: 5,
         title: 'Серія плакатів для фестивалю', 
         year: 2021, 
-        category: 'Графічний дизайн', 
-        desc: 'Створення унікальних візуальних образів та стилістики для культурної події.', 
-        img: 'assets/img/project5.jpg' 
+        category: 'Графічний дизайн',
+        image: 'assets/img/project5.jpg' 
     }
 ];
 
@@ -95,19 +95,26 @@ function renderGallery(worksArray) {
             card.classList.add('recent');
         }
 
+        // Опис p
+        // Додавання data-атрибута id
+        card.dataset.id = work.id;
+        card.dataset.category = work.category;
+
+        //Створення зображення
+        const imgElement = document.createElement('img');
+        imgElement.src = work.image;
+        imgElement.alt = work.title;
+
         // Заголовок h3
         const titleElement = document.createElement('h3');
         titleElement.textContent = work.title;
 
-        const imgElement = document.createElement('img');
-        imgElement.src = work.img;
-        imgElement.alt = work.title;
-
-        // Опис p
-        const descElement = document.createElement('p');
-        descElement.textContent = work.desc;
+        //Тег p виводимо рік та категорію
+        const detailsElement = document.createElement('p');
+        detailsElement.textContent = `${work.year} рік • ${work.category}`;
         
-        card.append(titleElement, imgElement, descElement);
+        // Збирання картки у правильному порядку (наприклад: картинка, заголовок, деталі)
+        card.append(imgElement, titleElement, detailsElement);
 
         if (galleryContainer) {
             galleryContainer.append(card);
@@ -120,3 +127,66 @@ function renderGallery(worksArray) {
 }
 
 renderGallery(works);
+
+// Обробник події submit: додає новий проєкт до масиву та оновлює галерею без перезавантаження сторінки
+const form = document.querySelector('#project-form');
+
+form.addEventListener('submit', (event) => {
+
+    event.preventDefault();
+
+    const titleInput = document.querySelector('#title-input').value.trim();
+    const yearInput = Number(document.querySelector('#year-input').value.trim());
+    const categoryInput = document.querySelector('#category-select').value;
+
+    const newProject = {
+        id: works.length + 1,
+        title: titleInput,
+        year: yearInput,
+        category: categoryInput,
+        image: 'assets/img/project.jpg' // Заглушка для картинки
+    };
+
+    works.push(newProject);
+
+    renderGallery(works);
+    
+    form.reset();
+
+});
+
+// Обробник події input: перевіряє валідність введеного року (запобігає введенню року з майбутнього)
+const yearField = document.querySelector('#year-input');
+
+if (yearField) {
+    yearField.addEventListener('input', () => {
+        const currentYear = new Date().getFullYear();
+        const enteredYear = Number(yearField.value);
+
+        if (enteredYear > currentYear) {
+            yearField.setCustomValidity('Рік створення не може бути більшим за поточний!');
+        } else {
+            yearField.setCustomValidity('');
+        }
+    });
+}
+
+// Обробник події change: здійснює динамічну фільтрацію карток за обраною категорією
+const categoryFilter = document.querySelector('#category-filter');
+
+if (categoryFilter) {
+    categoryFilter.addEventListener('change', () => {
+        const selectedCategory = categoryFilter.value;
+        const projectArticles = document.querySelectorAll('#gallery .card');
+
+        projectArticles.forEach(article => {
+            const articleCategory = article.dataset.category;
+
+            if (selectedCategory === 'all' || articleCategory === selectedCategory) {
+                article.classList.remove('hidden');
+            } else {
+                article.classList.add('hidden');
+            }
+        });
+    });
+}

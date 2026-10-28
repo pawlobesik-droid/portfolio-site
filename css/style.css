@@ -312,3 +312,7 @@ img {
        padding: 2.5rem 1rem 0;
    }
 }
+
+.hidden {
+    display: none !important;
+}

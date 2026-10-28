@@ -34,6 +34,37 @@
       
       <p>Кількість робіт у портфорліо: <span id="projects-count">0</span></p>
 
+      <div class="filter-wrapper" style="margin-bottom: 15px;">
+        <label for="category-filter">Фільтр категорій:</label><br>
+        <select id="category-filter">
+          <option value="all">Усі категорії</option>
+          <option value="Веб-дизайн">Веб-дизайн</option>
+          <option value="Брендинг">Брендинг</option>
+          <option value="UI/UX">UI/UX</option>
+          <option value="Графічний дизайн">Графічний дизайн</option>
+          <option value="Фотографія">Фотографія</option>
+        </select>
+      </div>
+
+      <form id="project-form" style="margin-bottom: 20px;">
+        <div>
+          <label for="title-input">Назва проєкту:</label><br>
+          <input type="text" id="title-input" name="title" required placeholder="Введіть назву">
+        </div>
+        <div>
+          <label for="year-input">Рік створення:</label><br>
+          <input type="number" id="year-input" name="year" required min="2000" placeholder="2026">
+        </div>
+        <div>
+          <label for="category-select">Категорія:</label><br>
+          <select id="category-select" name="category" required>
+            <option value="photo">Фотографія</option>
+            <option value="design">Дизайн</option>
+          </select>
+        </div>
+        <button type="submit" style="margin-top: 10px;">Додати проєкт</button>
+      </form>
+
       <div class="cards" id="gallery"> 
 
         <article class="card">
