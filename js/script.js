@@ -144,7 +144,7 @@ form.addEventListener('submit', (event) => {
         title: titleInput,
         year: yearInput,
         category: categoryInput,
-        image: 'assets/img/project.jpg' // Заглушка для картинки
+        image: 'assets/img/project1.jpg' // Заглушка для картинки
     };
 
     works.push(newProject);
