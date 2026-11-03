@@ -139,12 +139,30 @@ form.addEventListener('submit', (event) => {
     const yearInput = Number(document.querySelector('#year-input').value.trim());
     const categoryInput = document.querySelector('#category-select').value;
 
+    //База доступних картинок за категоріями
+    const categoryImages = {
+        'Веб-дизайн': ['assets/img/project1.jpg', 'assets/img/project4.jpg', 'assets/img/project12.jpg'],
+        'Брендинг': ['assets/img/project2.jpg', 'assets/img/project7.jpg', 'assets/img/project13.jpg'],
+        'UI/UX': ['assets/img/project3.jpg', 'assets/img/project8.jpg', 'assets/img/project11.jpg'],
+        'Графічний дизайн': ['assets/img/project5.jpg', 'assets/img/project9.jpg', 'assets/img/project15.jpg'],
+        'Фотографія': ['assets/img/project6.jpg', 'assets/img/project10.jpg', 'assets/img/project14.jpg'] 
+    };
+
+    // Вибираємо масив картинки для обраної категорії
+    const availableImages = categoryImages[categoryInput] || ['assets/img/project1.jpg'];
+
+    // Рахуємо, скільки робіт цієї ж категорії вже є в масиві, щоб брати картинки по черзі
+    const categoryWorkCount = works.filter(work => work.category === categoryInput).length;
+
+    // Послідовно вибираємо наступну картинку з масиву категорії (по колу)
+    const nextImage = availableImages[categoryWorkCount % availableImages.length];
+
     const newProject = {
         id: works.length + 1,
         title: titleInput,
         year: yearInput,
         category: categoryInput,
-        image: 'assets/img/project1.jpg' // Заглушка для картинки
+        image: nextImage // Картинка відповідає категорії
     };
 
     works.push(newProject);
