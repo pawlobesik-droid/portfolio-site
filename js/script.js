@@ -8,9 +8,14 @@ if (placeholderCard) {
   console.log('Статична картка-заглушка успішно видалена з DOM');
 }
 
+const API_URL = 'https://jsonplaceholder.typicode.com/photos?albumId=1';
+
+const errorMessageElement = document.querySelector('#error-message');
+const refreshButton = document.querySelector('#refresh-button');
+
 // Крок 4. Оголошення даних варіанта 2 (Портфоліо фотографа/дизайнера)
 // Масив об'єктів робіт портфоліо
-const works = [
+let works = [
     {   
         id: 1,
         title: 'Концепт веб-сайту галереї', 
@@ -126,7 +131,70 @@ function renderGallery(worksArray) {
     }
 }
 
-renderGallery(works);
+// Ініціалізація виклику завантаження та слухач події на кнопку «Оновити дані»
+loadData();
+
+
+if (refreshButton) {
+    refreshButton.addEventListener('click', loadData);
+}
+
+/**
+ * Асинхронна функція loadData для запиту даних з API та обробки станів/помилок
+ */
+async function loadData() {
+
+    // 1. Активація стану завантаження (блокування кнопки) та очищення повідомлень про помилки
+    if (refreshButton) refreshButton.disabled = true;
+    if (errorMessageElement) errorMessageElement.textContent = '';
+
+    try {
+
+        // 2. Виконання мережевого запиту за допомогою fetch та очікування відповіді
+        const response = await fetch(API_URL);
+
+        // 3. Перевірка HTTP-статусу відповіді (ручна обробка помилок на кшталт 404)
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Помилка 404: альбом не знайдено');
+            }
+            throw new Error(`Сервер відповів кодом ${response.status}`);
+        }
+
+        // 4. Розбір тіла відповіді у формат JSON та виведення в консоль
+        const data = await response.json();
+        console.log('Отримані дані з API:', data);
+
+        // Відображення локальних проєктів портфоліо після успішної перевірки зв'язку з сервером 
+
+        renderGallery(works);
+
+    } catch (error) {
+
+        // 5. Обробка винятків (Network errors або згенеровані HTTP-помилки)
+        let userMessage = 'Не вдалося завантажити дані. Будь ласка, спробуйте ще раз.';
+
+        if (error.message === 'Помилка 404: альбом не знайдено') {
+            userMessage = 'Альбом не знайдено. Перевірте URL або спробуйте інший альбом.';
+        } else if (!navigator.onLine) {
+            userMessage = 'Відсутнє підключення до інтернету. Список недоступний офлайн'
+        }
+
+        // Виведення повідомлення для користувача в DOM-елемент
+        if (errorMessageElement) {
+            errorMessageElement.textContent = userMessage;
+        }
+
+        // Дублювання детальної технічної помилки в консоль для розробника
+        console.error('Помилка при завантаженні даних:', error);
+    } finally {
+
+        // 6. Гарантоване вимкнення індикатора завантаження (розблокування кнопки)
+        if (refreshButton) {
+            refreshButton.disabled = false;
+        }
+    }
+}
 
 // Обробник події submit: додає новий проєкт до масиву та оновлює галерею без перезавантаження сторінки
 const form = document.querySelector('#project-form');

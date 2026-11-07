@@ -316,3 +316,39 @@ img {
 .hidden {
     display: none !important;
 }
+
+#error-message:not(:empty) {
+    background-color: var(--color-surface) !important;
+    color: #68150A !important; /* Чіткий фірмовий бордовий колір без перебивання */
+    border-left: 4px solid #68150A !important;
+    border-top: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem 1rem 3.5rem;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: relative;
+    max-width: 100%;
+}
+
+#error-message:not(:empty)::before {
+    content: "!";
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    background-color: #68150A !important;
+    color: #ffffff !important;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
