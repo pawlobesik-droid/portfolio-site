@@ -159,7 +159,7 @@ if (refreshButton) {
 }
 
 /**
- * Асинхронна функція loadData для запиту даних з API та обробки станів/помилок
+  * Запит до JSONPlaceholder (https://jsonplaceholder.typicode.com/photos?albumId=1) та обробка станів/помилок
  */
 async function loadData() {
 
