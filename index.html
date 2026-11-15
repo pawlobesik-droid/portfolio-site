@@ -32,7 +32,7 @@
     <section id="works">
       <h2>Мої роботи</h2>
       
-      <p>Кількість робіт у портфорліо: <span id="projects-count">0</span></p>
+      <p>Кількість робіт у портфоліо: <span id="projects-count">0</span></p>
 
       <div class="filter-wrapper" style="margin-bottom: 15px;">
         <label for="category-filter">Фільтр категорій:</label><br>
@@ -43,12 +43,14 @@
           <option value="UI/UX">UI/UX</option>
           <option value="Графічний дизайн">Графічний дизайн</option>
           <option value="Фотографія">Фотографія</option>
+          <option value="Фото з альбому">Фото з альбому</option>
         </select>
       </div>
 
       <!-- Кнопка оновлення та блок для виведення помилок-->
-      <button id="refresh-button" style="margin-bottom: 15px;">Оновити дані</button>
-      <div id="error-message" style="color: red; margin-bottom: 15px; font-weight: 500;"></div>
+            <button id="refresh-button" type="button">Оновити дані</button>
+      <p id="loading-message" role="status" hidden>Завантаження…</p>
+      <div id="error-message" role="alert"></div>
 
       <form id="project-form" style="margin-bottom: 20px;">
         <div>

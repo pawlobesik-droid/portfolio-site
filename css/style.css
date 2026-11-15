@@ -113,7 +113,6 @@ section h2 {
     border-radius: 6px;
     overflow: hidden;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    background-color: var(--color-surface);
 }
 
 .card img {
@@ -351,4 +350,20 @@ img {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+}
+
+
+#loading-message {
+    margin: 0 0 1.5rem;
+    font-size: var(--fs-base);
+    color: var(--color-text);
+}
+
+#refresh-button {
+    margin-bottom: 1rem;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

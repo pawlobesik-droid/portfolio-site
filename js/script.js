@@ -13,6 +13,8 @@ const API_URL = 'https://jsonplaceholder.typicode.com/photos?albumId=1';
 const errorMessageElement = document.querySelector('#error-message');
 const refreshButton = document.querySelector('#refresh-button');
 
+const loadingMessage = document.querySelector('#loading-message');
+
 // Крок 4. Оголошення даних варіанта 2 (Портфоліо фотографа/дизайнера)
 // Масив об'єктів робіт портфоліо
 let works = [
@@ -86,6 +88,16 @@ works.forEach(work => {
 const galleryContainer = document.querySelector('#gallery');
 const projectsCountElement = document.querySelector('#projects-count');
 
+
+// Перетворює об'єкт фото з API у формат, який очікує renderGallery
+const mapPhotoToWork = photo => ({
+    id: photo.id,
+    title: photo.title,
+    image: photo.thumbnailUrl,
+    year: null,
+    category: 'Фото з альбому'
+});
+
 function renderGallery(worksArray) {
     if (galleryContainer) {
         galleryContainer.innerHTML = ''; 
@@ -110,13 +122,20 @@ function renderGallery(worksArray) {
         imgElement.src = work.image;
         imgElement.alt = work.title;
 
+        // Якщо зображення не завантажилось, показуємо локальне (один раз)
+        imgElement.addEventListener('error', () => {
+            imgElement.src = 'assets/img/project1.jpg';
+        }, { once: true });
+
         // Заголовок h3
         const titleElement = document.createElement('h3');
         titleElement.textContent = work.title;
 
         //Тег p виводимо рік та категорію
         const detailsElement = document.createElement('p');
-        detailsElement.textContent = `${work.year} рік • ${work.category}`;
+                detailsElement.textContent = work.year
+            ? `${work.year} рік • ${work.category}`
+            : `Фото №${work.id} • ${work.category}`;
         
         // Збирання картки у правильному порядку (наприклад: картинка, заголовок, деталі)
         card.append(imgElement, titleElement, detailsElement);
@@ -144,9 +163,12 @@ if (refreshButton) {
  */
 async function loadData() {
 
-    // 1. Активація стану завантаження (блокування кнопки) та очищення повідомлень про помилки
+       // 1. Стан завантаження: блокуємо кнопку, показуємо індикатор, очищаємо помилки й стару галерею
     if (refreshButton) refreshButton.disabled = true;
+    if (loadingMessage) loadingMessage.hidden = false;
     if (errorMessageElement) errorMessageElement.textContent = '';
+    if (galleryContainer) galleryContainer.innerHTML = '';
+    if (projectsCountElement) projectsCountElement.textContent = 0;
 
     try {
 
@@ -165,8 +187,13 @@ async function loadData() {
         const data = await response.json();
         console.log('Отримані дані з API:', data);
 
-        // Відображення локальних проєктів портфоліо після успішної перевірки зв'язку з сервером 
+               // Порожній масив означає, що альбому з таким id не існує
+        if (data.length === 0) {
+            throw new Error('Помилка 404: альбом не знайдено');
+        }
 
+        // Дані з API перетворюємо та виводимо в DOM функцією renderGallery
+        works = data.map(mapPhotoToWork);
         renderGallery(works);
 
     } catch (error) {
@@ -187,9 +214,10 @@ async function loadData() {
 
         // Дублювання детальної технічної помилки в консоль для розробника
         console.error('Помилка при завантаженні даних:', error);
-    } finally {
+        } finally {
 
-        // 6. Гарантоване вимкнення індикатора завантаження (розблокування кнопки)
+        // 6. Гарантоване вимкнення індикатора завантаження
+        if (loadingMessage) loadingMessage.hidden = true;
         if (refreshButton) {
             refreshButton.disabled = false;
         }
