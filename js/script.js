@@ -1,3 +1,5 @@
+// Фреймворк: Vue 3 (CDN, без збірки) — обрано, бо шаблон компонента близький до звичайного HTML, не потрібні JSX і Babel
+
 // Крок 3. Перевірка підключення файлу
 console.log('script.js успішно підключений');
 
@@ -15,45 +17,6 @@ const refreshButton = document.querySelector('#refresh-button');
 
 const loadingMessage = document.querySelector('#loading-message');
 
-// Крок 4. Оголошення даних варіанта 2 (Портфоліо фотографа/дизайнера)
-// Масив об'єктів робіт портфоліо
-let works = [
-    {   
-        id: 1,
-        title: 'Концепт веб-сайту галереї', 
-        year: 2026, 
-        category: 'Веб-дизайн',
-        image: 'assets/img/project1.jpg' 
-    },
-    { 
-        id: 2,
-        title: 'Фірмовий стиль кав\'ярні', 
-        year: 2024, 
-        category: 'Брендинг', 
-        image: 'assets/img/project2.jpg' 
-    },
-    { 
-        id: 3,
-        title: 'UI/UX дизайн мобільного застосунку', 
-        year: 2022, 
-        category: 'UI/UX', 
-        image: 'assets/img/project3.jpg' 
-    },
-    { 
-        id: 4,
-        title: 'Редизайн сервісу доставки', 
-        year: 2025, 
-        category: 'Веб-дизайн',
-        image: 'assets/img/project4.jpg' 
-    },
-    { 
-        id: 5,
-        title: 'Серія плакатів для фестивалю', 
-        year: 2021, 
-        category: 'Графічний дизайн',
-        image: 'assets/img/project5.jpg' 
-    }
-];
 
 // Крок 5 та 6. Обробка даних циклом та умовна класифікація
 // Функція виводить роботи певної категорії та перевіряє, чи робота старша за 3 роки
@@ -71,23 +34,11 @@ function filterAndClassifyWorks(worksArray, targetCategory) {
   }
 }
 
-// Викликаємо функцію для категорії 'Веб-дизайн'
-filterAndClassifyWorks(works, 'Веб-дизайн');
-
 // Крок 7. Стрілкова функція для перевірки актуальності роботи
 // Повертає true, якщо роботі не більше 2 років (тобто year >= 2024)
 const isRecent = (year) => (2026 - year) <= 2;
 
-// Перевірка актуальності робіт стрілковою функцією та вивід у консоль
-console.log('--- Перевірка актуальності робіт (стрілкова функція isRecent) ---');
-works.forEach(work => {
-  const recentStatus = isRecent(work.year) ? 'Свіжа робота ( <= 2 років)' : 'Архівна робота';
-  console.log(`Проєкт "${work.title}" (${work.year} рік): ${recentStatus}`);
-});
-
-const galleryContainer = document.querySelector('#gallery');
 const projectsCountElement = document.querySelector('#projects-count');
-
 
 // Перетворює об'єкт фото з API у формат, який очікує renderGallery
 const mapPhotoToWork = photo => ({
@@ -98,68 +49,101 @@ const mapPhotoToWork = photo => ({
     category: 'Фото з альбому'
 });
 
-function renderGallery(worksArray) {
-    if (galleryContainer) {
-        galleryContainer.innerHTML = ''; 
-    }
+// Стару функцію renderGallery() (ручний рендер через createElement/innerHTML з практикуму 7) видалено:
+// її замінив компонент PortfolioItem разом із v-for у кореневому застосунку Vue.
 
-    worksArray.forEach(work => {
-        const card = document.createElement('article');
-        card.classList.add('card');
-
-        card.dataset.category = work.category;
-        if (isRecent(work.year)) {
-            card.classList.add('recent');
+// Компонент картки роботи: отримує дані через props, не звертається до глобальних змінних
+const PortfolioItem = {
+    props: ['id', 'title', 'year', 'category', 'thumbnailUrl'],
+    data () {
+        return { expanded: false, imageFailed: false };
+    },
+    computed: {
+        imageSrc() {
+        return this.imageFailed ? 'assets/img/project1.jpg' : this.thumbnailUrl;        
+    },
+        isRecentWork() {
+            return this.year !== null && (2026 - this.year) <= 2;
+        },
+        details() {
+            return this.year
+                ?`${this.year} рік • ${this.category}`
+                : `Фото №${this.id} • ${this.category}`;
+        },
+        description() {
+            return this.year
+            ? `Робота створена у ${this.year} році в категорії "${this.category}".`
+            : `Фото №${this.id} з тестового альбому JSONPlaceholder (категорія: "${this.category}")`;
         }
+    },
 
-        // Опис p
-        // Додавання data-атрибута id
-        card.dataset.id = work.id;
-        card.dataset.category = work.category;
-
-        //Створення зображення
-        const imgElement = document.createElement('img');
-        imgElement.src = work.image;
-        imgElement.alt = work.title;
-
-        // Якщо зображення не завантажилось, показуємо локальне (один раз)
-        imgElement.addEventListener('error', () => {
-            imgElement.src = 'assets/img/project1.jpg';
-        }, { once: true });
-
-        // Заголовок h3
-        const titleElement = document.createElement('h3');
-        titleElement.textContent = work.title;
-
-        //Тег p виводимо рік та категорію
-        const detailsElement = document.createElement('p');
-                detailsElement.textContent = work.year
-            ? `${work.year} рік • ${work.category}`
-            : `Фото №${work.id} • ${work.category}`;
-        
-        // Збирання картки у правильному порядку (наприклад: картинка, заголовок, деталі)
-        card.append(imgElement, titleElement, detailsElement);
-
-        if (galleryContainer) {
-            galleryContainer.append(card);
+    methods: {
+        onImageError() {
+            this.imageFailed = true;
         }
-    });
+    },
+    template: `
+    <article class="card" :class="{ recent: isRecentWork }" @click="expanded = !expanded">
+        <img :src="imageSrc" :alt="title" @error="onImageError">
+        <h3>{{ title }}</h3>
+        <p>{{ details }}</p>
+        <p v-if="expanded" class="card-details">{{description}}</p>
+    </article>
+    `
+};
 
-    if (projectsCountElement) {
-        projectsCountElement.textContent = worksArray.length;
-    }
-}
+const vm = Vue.createApp({
+    components: { PortfolioItem },
+    data() {
+        return {
+            works: [
+                { id: 1, title: 'Концепт веб-сайту галереї', year: 2026, category: 'Веб-дизайн', image: 'assets/img/project1.jpg' },
+                { id: 2, title: 'Фірмовий стиль кав\'ярні', year: 2024, category: 'Брендинг', image: 'assets/img/project2.jpg' },
+                { id: 3, title: 'UI/UX дизайн мобільного застосунку', year: 2022, category: 'UI/UX', image: 'assets/img/project3.jpg' },
+                { id: 4, title: 'Редизайн сервісу доставки', year: 2025, category: 'Веб-дизайн', image: 'assets/img/project4.jpg' },
+                { id: 5, title: 'Серія плакатів для фестивалю', year: 2021, category: 'Графічний дизайн', image: 'assets/img/project5.jpg' }
+            ],
+            selectedCategory: 'all'
+        };
+    },
+    computed: {
+        visibleWorks() {
+            return this.selectedCategory === 'all'
+                ? this.works
+                : this.works.filter(work => work.category === this.selectedCategory);
+        }
+    },
+    watch: {
+        'works.length': {
+            handler(count) {
+                if (projectsCountElement) projectsCountElement.textContent = count;
+            },
+            immediate: true
+        }
+    },
+    template: `
+        <portfolio-item v-for="work in visibleWorks" :key="work.id"
+            :id="work.id" :title="work.title" :year="work.year"
+            :category="work.category" :thumbnail-url="work.image" />`
+}).mount('#gallery');
+
+console.log('---Перевірка актуальності робіт (стрілкова функція isRecent)---');
+vm.works.forEach(work => {
+    const recentStatus = isRecent(work.year) ? 'Актуальна роботa (<= 2 років)' : 'Архівна робота';
+    console.log(`Проєкт "${work.title}" (${work.year} рік): ${recentStatus}`);
+});
+
+filterAndClassifyWorks(vm.works, 'Веб-дизайн');
 
 // Ініціалізація виклику завантаження та слухач події на кнопку «Оновити дані»
 loadData();
-
 
 if (refreshButton) {
     refreshButton.addEventListener('click', loadData);
 }
 
 /**
-  * Запит до JSONPlaceholder (https://jsonplaceholder.typicode.com/photos?albumId=1) та обробка станів/помилок
+ * Запит до JSONPlaceholder (https://jsonplaceholder.typicode.com/photos?albumId=1) та обробка станів/помилок
  */
 async function loadData() {
 
@@ -167,8 +151,7 @@ async function loadData() {
     if (refreshButton) refreshButton.disabled = true;
     if (loadingMessage) loadingMessage.hidden = false;
     if (errorMessageElement) errorMessageElement.textContent = '';
-    if (galleryContainer) galleryContainer.innerHTML = '';
-    if (projectsCountElement) projectsCountElement.textContent = 0;
+    vm.works = []; 
 
     try {
 
@@ -192,9 +175,8 @@ async function loadData() {
             throw new Error('Помилка 404: альбом не знайдено');
         }
 
-        // Дані з API перетворюємо та виводимо в DOM функцією renderGallery
-        works = data.map(mapPhotoToWork);
-        renderGallery(works);
+        // Дані з API кладемо в реактивний стан - Vue сам перемалює галерею
+        vm.works = data.map(mapPhotoToWork);
 
     } catch (error) {
 
@@ -248,22 +230,20 @@ form.addEventListener('submit', (event) => {
     const availableImages = categoryImages[categoryInput] || ['assets/img/project1.jpg'];
 
     // Рахуємо, скільки робіт цієї ж категорії вже є в масиві, щоб брати картинки по черзі
-    const categoryWorkCount = works.filter(work => work.category === categoryInput).length;
+    const categoryWorkCount = vm.works.filter(work => work.category === categoryInput).length;
 
     // Послідовно вибираємо наступну картинку з масиву категорії (по колу)
     const nextImage = availableImages[categoryWorkCount % availableImages.length];
 
     const newProject = {
-        id: works.length + 1,
+        id: vm.works.length + 1,
         title: titleInput,
         year: yearInput,
         category: categoryInput,
         image: nextImage // Картинка відповідає категорії
     };
 
-    works.push(newProject);
-
-    renderGallery(works);
+    vm.works.push(newProject);
     
     form.reset();
 
@@ -290,17 +270,7 @@ const categoryFilter = document.querySelector('#category-filter');
 
 if (categoryFilter) {
     categoryFilter.addEventListener('change', () => {
-        const selectedCategory = categoryFilter.value;
-        const projectArticles = document.querySelectorAll('#gallery .card');
-
-        projectArticles.forEach(article => {
-            const articleCategory = article.dataset.category;
-
-            if (selectedCategory === 'all' || articleCategory === selectedCategory) {
-                article.classList.remove('hidden');
-            } else {
-                article.classList.add('hidden');
-            }
-        });
+        //Vue сам перемалює галерею, коли змінюється selectedCategory
+        vm.selectedCategory = categoryFilter.value;
     });
 }
